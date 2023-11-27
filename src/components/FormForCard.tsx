@@ -1,5 +1,4 @@
 'use client'
-
 import React, {
   ChangeEvent,
   Dispatch,
@@ -17,20 +16,27 @@ const FormForCard: FC<FormForCardProps> = ({
   action,
   currCard,
 }) => {
-  // const[nameInput,setNameInput]=useState()
+  // State to manage form reload and create a reference for the input element
   const [reload, setReload] = useState(false)
   const ref = useRef<HTMLInputElement | null>(null)
-  const submitFotm = (e: ChangeEvent<HTMLFormElement>) => {
+
+  // Function to handle form submission
+  const submitForm = (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault()
+
+    // Get form data and initialize count and name variables
     const formData = new FormData(e.currentTarget)
     let count = 0
     let name = formData.get('naming')
 
+    // Iterate through responsibilities and their lists to count selected items
     responsibilitiesList.forEach((el) => {
       el.responsebList.forEach((ins) => {
         formData.get(ins.idName) === 'on' ? (count += 1) : null
       })
     })
+
+    // Update the card list based on the form action type
     if (action === 'create') {
       setCardlist((prev) => [
         ...prev,
@@ -39,6 +45,7 @@ const FormForCard: FC<FormForCardProps> = ({
           name: name,
           responsebiliesList: count,
           price: count * 10,
+          order: 0,
         },
       ])
     } else if (action === 'update') {
@@ -55,7 +62,10 @@ const FormForCard: FC<FormForCardProps> = ({
         )
       })
     }
+
+    // Trigger a reload by toggling the reload state for set false all checkbox
     setReload(!reload)
+    // Clear the input value if the ref exists
     if (ref.current) {
       ref.current.value = ''
     }
@@ -64,7 +74,7 @@ const FormForCard: FC<FormForCardProps> = ({
   return (
     <form
       className="bg-secondary-gray flex flex-1 rounded-lg p-4 flex-col h-full text-sm overflow-y-auto"
-      onSubmit={submitFotm}
+      onSubmit={submitForm}
     >
       <div className="bg-main-gray rounded-lg">
         <div className="p-4 flex flex-col gap-1">
@@ -77,14 +87,16 @@ const FormForCard: FC<FormForCardProps> = ({
             type="text"
             name="naming"
             placeholder="Введите название"
-            className="bg-transparent border-2 border-main-border rounded-lg px-4  py-3"
+            className="bg-transparent border-2 border-main-border rounded-lg px-4 py-3"
           />
         </div>
       </div>
+
       <div className="relative w-full mt-7 flex h-full flex-col ">
         <div className="absolute -top-3 right-0 w-full bg-main-gray rounded-t-lg h-10 flex items-center z-50 shadow-2xl">
           <span className="ml-3 text-dim">Обязаности</span>
         </div>
+
         <div className="flex-grow bg-main-gray pt-9 pl-3 flex flex-wrap w-full rounded-lg ">
           {responsibilitiesList.map((responseb) => (
             <div className="w-1/2 text-xs" key={responseb.id}>
@@ -100,6 +112,7 @@ const FormForCard: FC<FormForCardProps> = ({
             </div>
           ))}
         </div>
+        {/* Button to submit form */}
         <button className="h-12 mt-2 bg-accent w-full rounded-lg">
           Сохранить
         </button>

@@ -7,8 +7,6 @@ import { useRouter } from 'next/navigation'
 const NavBar = () => {
   const pathName = usePathname()
   const route = useRouter()
-  console.log(pathName)
-
   return (
     <nav className="flex justify-between text-sm">
       {pagesList.map((page) => (

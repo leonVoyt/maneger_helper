@@ -17,7 +17,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="flex flex-col min-h-screen font-TTSmalls bg-car-image-bg bg-cover bg-center bg-no-repeat">
+      <body className="flex flex-col min-h-screen font-TTSmalls bg-car-image-bg bg-cover bg-center bg-no-repeat bg-main-gray">
         <main className="flex-grow bg-shadow-bg min-h-screen h-screen text-white flex items-center justify-center bg-cover bg-center bg-no-repeat ">
           <section className="h-5/6 w-4/6 bg-main-gray p-6 flex flex-col ">
             <NavBar />
