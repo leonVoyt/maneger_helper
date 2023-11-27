@@ -2,26 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+@import '../assets/fonts/stylesheet.css';
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --form-control-color: #6764f1;
+  --form-control-disabled: rgba(245, 245, 245, 0.08);
+}
+::-webkit-scrollbar {
+  width: 5px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--form-control-disabled);
+  border-radius: 10px;
 }
