@@ -1,25 +1,66 @@
 'use client'
 
-import React, { ChangeEvent, Dispatch, FC, SetStateAction } from 'react'
+import React, {
+  ChangeEvent,
+  Dispatch,
+  FC,
+  SetStateAction,
+  useRef,
+  useState,
+} from 'react'
 import CustomCheckBox from './customCheckBox/CustomCheckBox'
 import { CardItem } from './CardList'
+import { ActionType } from '~/app/positions/page'
 
-const FormForCard: FC<FormForCardProps> = ({ setCardlist }) => {
+const FormForCard: FC<FormForCardProps> = ({
+  setCardlist,
+  action,
+  currCard,
+}) => {
+  // const[nameInput,setNameInput]=useState()
+  const [reload, setReload] = useState(false)
+  const ref = useRef<HTMLInputElement | null>(null)
   const submitFotm = (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault()
     const formData = new FormData(e.currentTarget)
-    let price = 0
+    let count = 0
     let name = formData.get('naming')
+
     responsibilitiesList.forEach((el) => {
       el.responsebList.forEach((ins) => {
-        formData.get(ins.idName) === 'on' ? (price += 10) : null
+        formData.get(ins.idName) === 'on' ? (count += 1) : null
       })
     })
-    setCardlist((prev) => [
-      ...prev,
-      { id: Math.random(), name: name, responsebiliesList: 1, price: price },
-    ])
+    if (action === 'create') {
+      setCardlist((prev) => [
+        ...prev,
+        {
+          id: Math.random(),
+          name: name,
+          responsebiliesList: count,
+          price: count * 10,
+        },
+      ])
+    } else if (action === 'update') {
+      setCardlist((prev) => {
+        return prev.map((card) =>
+          card.id === currCard?.id
+            ? {
+                ...card,
+                name: name,
+                price: count * 10,
+                responsebiliesList: count,
+              }
+            : card
+        )
+      })
+    }
+    setReload(!reload)
+    if (ref.current) {
+      ref.current.value = ''
+    }
   }
+
   return (
     <form
       className="bg-secondary-gray flex flex-1 rounded-lg p-4 flex-col h-full text-sm overflow-y-auto"
@@ -31,6 +72,7 @@ const FormForCard: FC<FormForCardProps> = ({ setCardlist }) => {
             Название
           </label>
           <input
+            ref={ref}
             id="naming"
             type="text"
             name="naming"
@@ -52,6 +94,7 @@ const FormForCard: FC<FormForCardProps> = ({ setCardlist }) => {
                   key={rspbList.id}
                   name={rspbList.name}
                   idName={rspbList.idName}
+                  reload={reload}
                 />
               ))}
             </div>
@@ -69,6 +112,8 @@ export default FormForCard
 
 type FormForCardProps = {
   setCardlist: Dispatch<SetStateAction<CardItem[]>>
+  action: ActionType
+  currCard: CardItem | null
 }
 
 const responsibilitiesList = [
