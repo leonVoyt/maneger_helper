@@ -10,6 +10,7 @@ const Positions = () => {
   const [showForm, setShowForm] = useState(false)
   const [currCard, setCurrCard] = useState<CardItem | null>(null)
   const [action, setAction] = useState<ActionType>('create')
+  const [loading, setLoading] = useState(true)
   // Function to handle card updates
   const handleUpdateCard = (
     cardItem: CardItem | null,
@@ -32,6 +33,7 @@ const Positions = () => {
       // Set the card list state, sorted by order
       setCardlist(cardlistFromStoreFormatted.sort((a, b) => a.order - b.order))
     }
+    setLoading(false)
   }, [])
 
   // Function to move a card item within the list
@@ -53,7 +55,7 @@ const Positions = () => {
       return updatedOrder
     })
   }
-  return (
+  return !loading ? (
     <div className="p-10 flex gap-4 h-full ">
       <DndProvider backend={HTML5Backend}>
         <CardList
@@ -72,6 +74,8 @@ const Positions = () => {
         />
       )}
     </div>
+  ) : (
+    <div className="w-40 h-40 ml-auto mr-auto mt-20 rounded-full border-4 border-accent border-dashed animate-spin "></div>
   )
 }
 export default Positions
