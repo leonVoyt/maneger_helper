@@ -8,13 +8,14 @@ import React, {
   useState,
 } from 'react'
 import CustomCheckBox from './customCheckBox/CustomCheckBox'
-import { CardItem } from './CardList'
+import { CardItem, ResponsebiliesListType } from './CardList'
 import { ActionType } from '~/app/positions/page'
 
 const FormForCard: FC<FormForCardProps> = ({
   setCardlist,
   action,
   currCard,
+  setShowForm,
 }) => {
   // State to manage form reload and create a reference for the input element
   const [reload, setReload] = useState(false)
@@ -26,26 +27,31 @@ const FormForCard: FC<FormForCardProps> = ({
 
     // Get form data and initialize count and name variables
     const formData = new FormData(e.currentTarget)
-    let count = 0
+    let count: ResponsebiliesListType[] = []
     let name = formData.get('naming')
 
     // Iterate through responsibilities and their lists to count selected items
     responsibilitiesList.forEach((el) => {
       el.responsebList.forEach((ins) => {
-        formData.get(ins.idName) === 'on' ? (count += 1) : null
+        formData.get(ins.idName) === 'on'
+          ? count.push({ [ins.idName]: true })
+          : count.push({ [ins.idName]: false })
       })
     })
 
     // Update the card list based on the form action type
+    console.log(currCard)
+
     if (action === 'create') {
       setCardlist((prev) => [
         ...prev,
         {
           id: Math.random(),
           name: name,
-          responsebiliesList: count,
-          price: count * 10,
+          responsebiliesList: count.length,
+          price: count.length,
           order: 0,
+          list: count,
         },
       ])
     } else if (action === 'update') {
@@ -55,8 +61,9 @@ const FormForCard: FC<FormForCardProps> = ({
             ? {
                 ...card,
                 name: name,
-                price: count * 10,
-                responsebiliesList: count,
+                price: count.length * 10,
+                responsebiliesList: count.length,
+                list: count,
               }
             : card
         )
@@ -69,6 +76,7 @@ const FormForCard: FC<FormForCardProps> = ({
     if (ref.current) {
       ref.current.value = ''
     }
+    setShowForm(false)
   }
 
   return (
@@ -107,6 +115,7 @@ const FormForCard: FC<FormForCardProps> = ({
                   name={rspbList.name}
                   idName={rspbList.idName}
                   reload={reload}
+                  currCard={currCard}
                 />
               ))}
             </div>

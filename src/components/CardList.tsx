@@ -45,4 +45,9 @@ export type CardItem = {
   price: number
   responsebiliesList: number
   order: number
+  list: ResponsebiliesListType[]
+}
+
+export type ResponsebiliesListType = {
+  [x: string]: boolean
 }

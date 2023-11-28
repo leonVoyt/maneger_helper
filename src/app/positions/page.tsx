@@ -23,7 +23,6 @@ const Positions = () => {
   // Effect to load card list from local storage on component mount
   useEffect(() => {
     // Retrieve card list from local storage
-    setLoading(true)
     let cardlistFromStore: string | null =
       localStorage.getItem('categoriesOrder')
 
@@ -68,6 +67,7 @@ const Positions = () => {
           setCardlist={setCardlist}
           action={action}
           currCard={currCard}
+          setShowForm={setShowForm}
         />
       )}
     </div>
