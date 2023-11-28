@@ -6,6 +6,7 @@ const CardList: FC<CardListProps> = ({
   cardlist,
   handleUpdateCard,
   moveItem,
+  currCard,
 }) => {
   return (
     <div className="flex flex-col justify-between">
@@ -13,7 +14,12 @@ const CardList: FC<CardListProps> = ({
         {cardlist.length ? (
           cardlist.map((card, index) => (
             <div key={card.id} onClick={() => handleUpdateCard(card, 'update')}>
-              <MyCard card={card} moveItem={moveItem} index={index} />
+              <MyCard
+                card={card}
+                moveItem={moveItem}
+                index={index}
+                currCard={currCard}
+              />
             </div>
           ))
         ) : (
@@ -38,14 +44,13 @@ type CardListProps = {
   cardlist: CardItem[]
   handleUpdateCard: (CardItem: CardItem | null, actionProp: ActionType) => void
   moveItem: (a: number, b: number) => void
+  currCard: CardItem | null
 }
 export type CardItem = {
   id: number
   name: FormDataEntryValue | null
-  price: number
-  responsebiliesList: number
   order: number
-  list: ResponsebiliesListType[]
+  responsebiliesList: ResponsebiliesListType[]
 }
 
 export type ResponsebiliesListType = {

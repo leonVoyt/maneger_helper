@@ -3,11 +3,12 @@ import React, {
   ChangeEvent,
   Dispatch,
   FC,
+  MouseEvent,
   SetStateAction,
-  useRef,
+  useEffect,
   useState,
 } from 'react'
-import CustomCheckBox from './customCheckBox/CustomCheckBox'
+import CustomCheckBox from './UI/customCheckBox/CustomCheckBox'
 import { CardItem, ResponsebiliesListType } from './CardList'
 import { ActionType } from '~/app/positions/page'
 
@@ -18,65 +19,75 @@ const FormForCard: FC<FormForCardProps> = ({
   setShowForm,
 }) => {
   // State to manage form reload and create a reference for the input element
-  const [reload, setReload] = useState(false)
-  const ref = useRef<HTMLInputElement | null>(null)
+  const [nameInput, setNameInput] = useState('')
 
+  useEffect(() => {
+    const str = currCard?.name?.toString()
+    setNameInput(str ?? '')
+  }, [currCard])
   // Function to handle form submission
   const submitForm = (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     // Get form data and initialize count and name variables
     const formData = new FormData(e.currentTarget)
-    let count: ResponsebiliesListType[] = []
+    let responsebilies: ResponsebiliesListType[] = []
     let name = formData.get('naming')
-
     // Iterate through responsibilities and their lists to count selected items
     responsibilitiesList.forEach((el) => {
       el.responsebList.forEach((ins) => {
-        formData.get(ins.idName) === 'on'
-          ? count.push({ [ins.idName]: true })
-          : count.push({ [ins.idName]: false })
+        formData.get(ins.idName) === 'on' &&
+          responsebilies.push({ [ins.idName]: true })
       })
     })
 
     // Update the card list based on the form action type
-    // console.log(currCard)
-
+    let updatedCardList: CardItem[] = []
     if (action === 'create') {
-      setCardlist((prev) => [
-        ...prev,
-        {
-          id: Math.random(),
-          name: name,
-          responsebiliesList: count.length,
-          price: count.length,
-          order: 0,
-          list: count,
-        },
-      ])
+      setCardlist((prev) => {
+        updatedCardList = [
+          ...prev,
+          {
+            id: Math.random(),
+            name: name,
+            order: 0,
+            responsebiliesList: responsebilies,
+          },
+        ]
+        return updatedCardList
+      })
     } else if (action === 'update') {
       setCardlist((prev) => {
-        return prev.map((card) =>
+        updatedCardList = prev.map((card) =>
           card.id === currCard?.id
             ? {
                 ...card,
                 name: name,
-                price: count.length * 10,
-                responsebiliesList: count.length,
-                list: count,
+                responsebiliesList: responsebilies,
               }
             : card
         )
+        return updatedCardList
       })
     }
+    // Store the updated card list in local storage
+    localStorage.setItem('categoriesOrder', JSON.stringify(updatedCardList))
 
-    // Trigger a reload by toggling the reload state for set false all checkbox
-    setReload(!reload)
-    // Clear the input value if the ref exists
-    if (ref.current) {
-      ref.current.value = ''
-    }
     setShowForm(false)
+  }
+  const handleDelete = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    let updatedCardList: CardItem[] = []
+
+    setCardlist((prev) => {
+      updatedCardList = prev.filter((card) => card.id !== currCard?.id)
+      return updatedCardList
+    })
+    localStorage.setItem('categoriesOrder', JSON.stringify(updatedCardList))
+    setShowForm(false)
+  }
+  const handleOnChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
+    setNameInput(e.target.value)
   }
 
   return (
@@ -90,7 +101,8 @@ const FormForCard: FC<FormForCardProps> = ({
             Название
           </label>
           <input
-            ref={ref}
+            onChange={handleOnChangeInput}
+            value={nameInput}
             id="naming"
             type="text"
             name="naming"
@@ -114,13 +126,29 @@ const FormForCard: FC<FormForCardProps> = ({
                   key={rspbList.id}
                   name={rspbList.name}
                   idName={rspbList.idName}
-                  reload={reload}
                   currCard={currCard}
                 />
               ))}
             </div>
           ))}
         </div>
+        {/* Button to delete card */}
+        {currCard !== null ? (
+          <button
+            className="h-12 mt-2 bg-red-400 w-full rounded-lg"
+            onClick={(e) => handleDelete(e)}
+          >
+            Удалить
+          </button>
+        ) : (
+          <button
+            className="h-12 mt-2 bg-orange-400 w-full rounded-lg"
+            onClick={(e) => handleDelete(e)}
+          >
+            Отмена
+          </button>
+        )}
+
         {/* Button to submit form */}
         <button className="h-12 mt-2 bg-accent w-full rounded-lg">
           Сохранить
@@ -136,6 +164,7 @@ type FormForCardProps = {
   setCardlist: Dispatch<SetStateAction<CardItem[]>>
   action: ActionType
   currCard: CardItem | null
+  setShowForm: Dispatch<SetStateAction<boolean>>
 }
 
 const responsibilitiesList = [

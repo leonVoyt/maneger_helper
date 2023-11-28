@@ -8,7 +8,7 @@ import { CardItem } from './CardList'
 import { useDrag, useDrop } from 'react-dnd'
 const ItemType = 'ITEM'
 
-const MyCard: FC<MyCardProps> = ({ card, index, moveItem }) => {
+const MyCard: FC<MyCardProps> = ({ card, index, moveItem, currCard }) => {
   const [, ref] = useDrag({
     type: ItemType,
     item: { id: card.id, index },
@@ -22,8 +22,13 @@ const MyCard: FC<MyCardProps> = ({ card, index, moveItem }) => {
       }
     },
   })
+
   return (
-    <div className="h-20 flex bg-secondary-gray items-center justify-between min-w-[300px] px-4 rounded-lg mb-2 text-xs">
+    <div
+      className={`h-20 flex bg-secondary-gray items-center justify-between min-w-[300px] px-4 rounded-lg mb-2 text-xs cursor-pointer  ${
+        currCard && currCard.id === card.id ? 'border-2 border-accent ' : ''
+      }`}
+    >
       <div className="flex items-center h-full gap-4 ">
         <Image
           alt=""
@@ -35,13 +40,16 @@ const MyCard: FC<MyCardProps> = ({ card, index, moveItem }) => {
           <span className="text-sm font-semibold">{`${card.name}`}</span>
           <br />
           <span className="font-semibold text-dim">
-            {card.responsebiliesList} заданий
+            {card.responsebiliesList.length}{' '}
+            {card.responsebiliesList.length < 5 ? 'задания' : 'заданий'}
           </span>
         </div>
       </div>
       <div>
-        <span className="font-bold text-yellow-500">${card.price} </span>
-        <span>/ chas</span>
+        <span className="font-bold text-yellow-500">
+          ${card.responsebiliesList.length * 10}{' '}
+        </span>
+        <span>{`/ час`}</span>
       </div>
     </div>
   )
@@ -53,4 +61,5 @@ type MyCardProps = {
   card: CardItem
   index: number
   moveItem: (a: number, b: number) => void
+  currCard: CardItem
 }

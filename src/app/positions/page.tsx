@@ -60,6 +60,7 @@ const Positions = () => {
           cardlist={cardlist}
           handleUpdateCard={handleUpdateCard}
           moveItem={moveItem}
+          currCard={currCard}
         />
       </DndProvider>
       {showForm && (

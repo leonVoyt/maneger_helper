@@ -1,17 +1,17 @@
 'use client'
-import React, { ChangeEvent, FC, useEffect, useRef, useState } from 'react'
+import React, { ChangeEvent, FC, useEffect, useState } from 'react'
 import classes from './CustomCheckBox.module.css'
-import { CardItem } from '../CardList'
+import { CardItem } from '../../CardList'
 
 const CustomCheckBox: FC<CustomCheckBoxProps> = ({
   name,
   idName,
   currCard,
 }) => {
-  const [isChecked, setIschecked] = useState(false)
+  const [isChecked, setIschecked] = useState(true)
   useEffect(() => {
     if (currCard !== null) {
-      currCard.list.find((el) => el[idName])
+      currCard.responsebiliesList.find((el) => el[idName])
         ? setIschecked(true)
         : setIschecked(false)
     } else {
@@ -45,6 +45,5 @@ export default CustomCheckBox
 type CustomCheckBoxProps = {
   name: string
   idName: string
-  reload: boolean
-  currCard: CardItem
+  currCard: CardItem | null
 }
