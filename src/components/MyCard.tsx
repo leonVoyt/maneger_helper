@@ -64,5 +64,5 @@ type MyCardProps = {
   card: CardItem
   index: number
   moveItem: (a: number, b: number) => void
-  currCard: CardItem
+  currCard: CardItem | null
 }
