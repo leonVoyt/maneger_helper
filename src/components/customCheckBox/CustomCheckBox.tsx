@@ -6,31 +6,32 @@ import { CardItem } from '../CardList'
 const CustomCheckBox: FC<CustomCheckBoxProps> = ({
   name,
   idName,
-  reload,
   currCard,
 }) => {
-  const ref = useRef<HTMLInputElement | null>(null)
-
+  const [isChecked, setIschecked] = useState(false)
   useEffect(() => {
-    let isChecked = false
     if (currCard !== null) {
       currCard.list.find((el) => el[idName])
-        ? (isChecked = true)
-        : (isChecked = false)
+        ? setIschecked(true)
+        : setIschecked(false)
+    } else {
+      setIschecked(false)
     }
-    if (ref.current) {
-      ref.current.checked = isChecked
-    }
-  }, [reload, currCard.id])
+  }, [currCard])
+
+  const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setIschecked(!isChecked)
+  }
 
   return (
     <div className="flex items-center gap-2 ">
       <input
-        ref={ref}
+        onChange={handleOnChange}
         id={idName}
         name={idName}
         type="checkbox"
         className={classes.checkBox}
+        checked={isChecked}
       />
       <label htmlFor={idName} className="cursor-pointer">
         {name}

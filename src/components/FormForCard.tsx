@@ -40,7 +40,7 @@ const FormForCard: FC<FormForCardProps> = ({
     })
 
     // Update the card list based on the form action type
-    console.log(currCard)
+    // console.log(currCard)
 
     if (action === 'create') {
       setCardlist((prev) => [
