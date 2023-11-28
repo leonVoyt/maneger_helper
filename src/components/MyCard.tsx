@@ -41,7 +41,10 @@ const MyCard: FC<MyCardProps> = ({ card, index, moveItem, currCard }) => {
           <br />
           <span className="font-semibold text-dim">
             {card.responsebiliesList.length}{' '}
-            {card.responsebiliesList.length < 5 ? 'задания' : 'заданий'}
+            {card.responsebiliesList.length < 5 &&
+            card.responsebiliesList.length
+              ? 'задания'
+              : 'заданий'}
           </span>
         </div>
       </div>

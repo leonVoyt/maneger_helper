@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import CardList, { CardItem } from '~/components/CardList'
 import FormForCard from '~/components/FormForCard'
@@ -21,7 +21,7 @@ const Positions = () => {
   }
 
   // Effect to load card list from local storage on component mount
-  useEffect(() => {
+  useLayoutEffect(() => {
     // Retrieve card list from local storage
     let cardlistFromStore: string | null =
       localStorage.getItem('categoriesOrder')
