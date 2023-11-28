@@ -10,7 +10,7 @@ import React, {
 } from 'react'
 import CustomCheckBox from './UI/customCheckBox/CustomCheckBox'
 import { CardItem, ResponsebiliesListType } from './CardList'
-import { ActionType } from '~/app/positions/page'
+import { ActionType } from '~/app/page'
 
 const FormForCard: FC<FormForCardProps> = ({
   setCardlist,

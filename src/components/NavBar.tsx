@@ -31,8 +31,8 @@ const NavBar = () => {
 export default NavBar
 
 const pagesList = [
-  { id: 0, name: 'Иерархия', route: '/' },
-  { id: 1, name: 'Должности', route: '/positions' },
+  { id: 0, name: 'Иерархия', route: '/hierarchy' },
+  { id: 1, name: 'Должности', route: '/' },
   { id: 2, name: 'Список персонала', route: '/stafflist' },
   { id: 3, name: 'Наборы экиперовки', route: '/equipmentsets' },
 ]

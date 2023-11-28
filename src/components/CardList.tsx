@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import MyCard from './MyCard'
-import { ActionType } from '~/app/positions/page'
+import { ActionType } from '~/app/page'
 
 const CardList: FC<CardListProps> = ({
   cardlist,
